@@ -13,7 +13,7 @@ contract TokenFactoryImplem is ERC721URIStorageUpgradeable, ERC721BurnableUpgrad
         __ERC721_init("EctarioToken", "ETK");
         __ERC721URIStorage_init();
         __ERC721Burnable_init();
-        __Ownable_init(msg.sender);
+        __Ownable_init(_msgSender());
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}

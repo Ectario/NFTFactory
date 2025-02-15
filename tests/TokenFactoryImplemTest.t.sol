@@ -54,4 +54,8 @@ contract TokenFactoryImplemTest is Test {
         vm.expectRevert();
         nft.mintNFT(recipient, "ipfs://QmTestURI");
     }
+
+    function testOwner() public view {
+        assertEq(nft.owner(), owner);
+    }
 }
