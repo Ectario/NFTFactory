@@ -146,6 +146,21 @@ _after some changes in `_contracts/TokenFactoryImplem.sol`_
 forge script scripts/Upgrade.s.sol --broadcast --rpc-url $RPC_URL
 ```
 
+### Minting an NFT
+
+To mint a new NFT, call the `mintNFT` function from the contract using the proxy address. This function requires the recipient’s address and the metadata URI of the token:  
+
+```sh
+cast send $PROXY_ADDRESS "mintNFT(address,string)" 0xRecipientAddress "ipfs://your-metadata-uri" --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+```
+
+Only the contract owner can execute this function. After minting, you can verify the token's metadata with:  
+
+```sh
+cast call $PROXY_ADDRESS "tokenURI(uint256)" 0 --rpc-url $RPC_URL
+```  
+Replace `0` with the correct token ID if multiple NFTs exist.
+
 ## Commands Overview
 
 | Task | Command |

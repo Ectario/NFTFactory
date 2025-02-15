@@ -10,6 +10,11 @@ contract TokenFactoryImplem is ERC721URIStorageUpgradeable, ERC721BurnableUpgrad
     uint256 private _nextTokenId;
     uint256 public version;
 
+    mapping(address => uint256[]) private _ownedTokens; // Track NFTs per owner
+
+    event NFTMinted(address indexed recipient, uint256 tokenId, string metadataURI);
+    event NFTBurned(address indexed owner, uint256 tokenId);
+
     function initialize() public initializer {
         __ERC721_init("EctarioToken", "ETK");
         __ERC721URIStorage_init();
@@ -20,7 +25,6 @@ contract TokenFactoryImplem is ERC721URIStorageUpgradeable, ERC721BurnableUpgrad
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
-        // already checked that it's the owner here
         version += 1;
     }
 
@@ -30,6 +34,37 @@ contract TokenFactoryImplem is ERC721URIStorageUpgradeable, ERC721BurnableUpgrad
 
         _safeMint(recipient, tokenId);
         _setTokenURI(tokenId, metadataURI);
+
+        _ownedTokens[recipient].push(tokenId); // Track ownership
+        emit NFTMinted(recipient, tokenId, metadataURI);
+    }
+
+    function burn(uint256 tokenId) public override {
+        address owner = ownerOf(tokenId);
+
+        // Remove the token ID from the owner's list
+        _removeTokenFromOwnerList(owner, tokenId);
+
+        // Call ERC721BurnableUpgradeable's burn function
+        super.burn(tokenId);
+
+        emit NFTBurned(owner, tokenId);
+    }
+
+    function tokensOfOwner(address owner) external view returns (uint256[] memory) {
+        return _ownedTokens[owner];
+    }
+
+    function _removeTokenFromOwnerList(address owner, uint256 tokenId) internal {
+        uint256 length = _ownedTokens[owner].length;
+        for (uint256 i = 0; i < length; i++) {
+            if (_ownedTokens[owner][i] == tokenId) {
+                // Swap the token with the last one, then pop the last one
+                _ownedTokens[owner][i] = _ownedTokens[owner][length - 1];
+                _ownedTokens[owner].pop();
+                break;
+            }
+        }
     }
 
     function supportsInterface(bytes4 interfaceId)
