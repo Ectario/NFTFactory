@@ -8,15 +8,21 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract TokenFactoryImplem2 is ERC721URIStorageUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable, OwnableUpgradeable {
     uint256 private _nextTokenId;
+    uint256 public version;
 
     function initialize() public initializer {
         __ERC721_init("EctarioToken", "ETK");
         __ERC721URIStorage_init();
         __ERC721Burnable_init();
         __Ownable_init(msg.sender);
+        
+        version = 1;
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
+        // already checked that it's the owner here
+        version += 1;
+    }
 
     function mintNFT(address recipient, string memory metadataURI) public onlyOwner {
         uint256 tokenId = _nextTokenId;

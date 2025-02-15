@@ -36,9 +36,11 @@ contract TokenFactoryImplemTest is Test {
 
     function testUpgrade() public {
         assertEq(nft.getDistributorName(), "Ectario");
+        assertEq(nft.version(), 1);
         TokenFactoryImplem2 newImplementation = new TokenFactoryImplem2();
         nft.upgradeToAndCall(address(newImplementation), "");
         assertEq(nft.getDistributorName(), "Modified by owner");
+        assertEq(nft.version(), 2);
     }
 
     function testUpgradeFail() public {
@@ -47,6 +49,7 @@ contract TokenFactoryImplemTest is Test {
         vm.prank(recipient);
         vm.expectRevert();
         nft.upgradeToAndCall(address(newImplementation), "");
+        assertEq(nft.version(), 1);
     }
 
     function testMintFail() public {
