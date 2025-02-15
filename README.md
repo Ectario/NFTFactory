@@ -7,7 +7,6 @@ This repository contains an upgradeable ERC721 NFT contract using Foundry and Op
 Ensure you have the following installed:
 - **Foundry** ([Installation Guide](https://book.getfoundry.sh/getting-started/installation))
 - **Anvil** (included with Foundry)
-- **Node.js** (optional for managing environment variables)
 - **A funded wallet** if deploying on a testnet or mainnet
 
 ## Setting Up a Local Environment
