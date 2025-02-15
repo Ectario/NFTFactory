@@ -161,6 +161,42 @@ cast call $PROXY_ADDRESS "tokenURI(uint256)" 0 --rpc-url $RPC_URL
 ```  
 Replace `0` with the correct token ID if multiple NFTs exist.
 
+### Retrieving NFTs Owned by an Address
+
+To check which NFTs are owned by a specific address, use the `tokensOfOwner` function. This function returns an array of token IDs belonging to the specified address.  
+
+#### Retrieve All NFTs of an Address
+
+```sh
+cast call $PROXY_ADDRESS "tokensOfOwner(address)" 0xUserAddress --rpc-url $RPC_URL
+```
+
+This will return an array of token IDs owned by `0xUserAddress`. If the user owns multiple NFTs, you will get something like:  
+```
+[1, 3, 7, 10]
+```
+If the array is empty (`[]`), the user does not own any NFTs.
+
+#### Check Metadata of a Specific NFT
+
+Once you have the token ID, you can check its metadata using: 
+
+```sh
+cast call $PROXY_ADDRESS "tokenURI(uint256)" 1 --rpc-url $RPC_URL
+```
+
+Replace `1` with the actual token ID from the previous step.
+
+#### Check Ownership of a Specific NFT 
+
+To verify the owner of a specific NFT:  
+
+```sh
+cast call $PROXY_ADDRESS "ownerOf(uint256)" 1 --rpc-url $RPC_URL
+```
+This will return the wallet address that owns token ID `1`. \
+These commands allow you to track which tokens belong to a specific address and verify their metadata.
+
 ## Commands Overview
 
 | Task | Command |
@@ -169,4 +205,9 @@ Replace `0` with the correct token ID if multiple NFTs exist.
 | Run tests | `forge test` |
 | Deploy contract locally | `export RPC_URL=<RPC_URL> && export PRIVATE_KEY=0xYourPrivateKeyHere && forge script scripts/Deploy.s.sol --broadcast --rpc-url $RPC_URL` |
 | Upgrade contract | `export RPC_URL=<RPC_URL> && export PROXY_ADDRESS=0xLoggedAddressAfterDeployment && export PRIVATE_KEY=0xYourPrivateKeyHere && forge script scripts/Upgrade.s.sol --broadcast --rpc-url $RPC_URL` |
-| Check implementation | `cast call $PROXY_ADDRESS "version()" --rpc-url $RPC_URL` |
+| Check implementation version | `cast call $PROXY_ADDRESS "version()" --rpc-url $RPC_URL` |
+| Mint an NFT | `cast send $PROXY_ADDRESS "mintNFT(address,string)" 0xRecipientAddress "ipfs://your-metadata-uri" --rpc-url $RPC_URL --private-key $PRIVATE_KEY` |
+| Check token metadata | `cast call $PROXY_ADDRESS "tokenURI(uint256)" <TokenID> --rpc-url $RPC_URL` |
+| Check all NFTs owned by an address | `cast call $PROXY_ADDRESS "tokensOfOwner(address)" 0xUserAddress --rpc-url $RPC_URL` |
+| Check the owner of a specific NFT | `cast call $PROXY_ADDRESS "ownerOf(uint256)" <TokenID> --rpc-url $RPC_URL` |
+| Burn an NFT | `cast send $PROXY_ADDRESS "burn(uint256)" <TokenID> --rpc-url $RPC_URL --private-key $PRIVATE_KEY` |
