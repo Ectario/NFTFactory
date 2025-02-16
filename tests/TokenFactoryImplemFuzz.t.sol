@@ -24,8 +24,10 @@ contract TokenFactoryImplemFuzz is Test {
     }
 
     function testMassMintBurn(uint256 numMints, uint256 numBurns) public {
-        vm.assume(numMints > 10 && numMints < 1000);
-        vm.assume(numBurns > 0 && numBurns <= numMints); // Only burn what we minted
+        numMints = bound(numMints, 0, 1e3); // https://book.getfoundry.sh/cheatcodes/assume 
+        require(numMints >= 0 && numMints <= 1000);
+        numBurns = bound(numBurns, 0, numMints); // https://book.getfoundry.sh/cheatcodes/assume
+        require(numBurns >= 0 && numBurns <= numMints); // Only burn what we minted
 
         address[] memory users = new address[](numMints);
         

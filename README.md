@@ -236,9 +236,10 @@ Slither: `slither . --json slither_out.json --filter-paths "lib/*"`
 
 No problematic behavior found.
 
-Foundry: `forge test --fuzz-runs 500`
+Foundry: `forge test --fuzz-runs 1000`
 
     Ran 12 tests for tests/TokenFactoryImplemTest.t.sol:TokenFactoryImplemTest
+
     [PASS] testBurnByNonOwner() (gas: 149784)
     [PASS] testBurnByNonOwnerDoesNotAffectTrueOwner() (gas: 156876)
     [PASS] testBurnNFT() (gas: 120035)
@@ -251,11 +252,11 @@ Foundry: `forge test --fuzz-runs 500`
     [PASS] testTokensOfOwnerAfterMint() (gas: 143745)
     [PASS] testUpgrade() (gas: 1603011)
     [PASS] testUpgradeFail() (gas: 1593014)
-    Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 1.47ms (2.82ms CPU time)
+    Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 1.79ms (3.35ms CPU time)
 
     Ran 1 test for tests/TokenFactoryImplemFuzz.t.sol:TokenFactoryImplemFuzz
 
-    [PASS] testMassMintBurn(uint256,uint256) (runs: 500, μ: 107635327, ~: 110086287)
-    Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 41.47s (41.47s CPU time)
+    [PASS] testMassMintBurn(uint256,uint256) (runs: 1001, μ: 93898751, ~: 88014325)
+    Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 74.87s (74.87s CPU time)
 
-    Ran 2 test suites in 41.48s (41.47s CPU time): 13 tests passed, 0 failed, 0 skipped (13 total tests)
+    Ran 2 test suites in 74.87s (74.87s CPU time): 13 tests passed, 0 failed, 0 skipped (13 total tests)
