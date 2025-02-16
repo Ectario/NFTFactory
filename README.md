@@ -211,3 +211,17 @@ These commands allow you to track which tokens belong to a specific address and 
 | Check all NFTs owned by an address | `cast call $PROXY_ADDRESS "tokensOfOwner(address)" 0xUserAddress --rpc-url $RPC_URL` |
 | Check the owner of a specific NFT | `cast call $PROXY_ADDRESS "ownerOf(uint256)" <TokenID> --rpc-url $RPC_URL` |
 | Burn an NFT | `cast send $PROXY_ADDRESS "burn(uint256)" <TokenID> --rpc-url $RPC_URL --private-key $PRIVATE_KEY` |
+
+## Static Security analysis
+
+No problematic pattern found.
+
+Slither: `slither . --json slither_out.json --filter-paths "lib/*"`
+
+    . analyzed (30 contracts with 94 detectors), 0 result(s) found
+
+    {
+        "success": true,
+        "error": null,
+        "results": {}
+    }
