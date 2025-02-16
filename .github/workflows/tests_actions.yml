@@ -18,6 +18,7 @@ jobs:
       - name: Install Foundry
         run: |
           curl -L https://foundry.paradigm.xyz | bash
+          source ~/.bashrc
           foundryup
 
       - name: Run fuzzing & tests (1000 fuzz runs)
