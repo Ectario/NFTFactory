@@ -8,19 +8,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  check:
+    name: Foundry project
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install Foundry
-        run: |
-          curl -L https://foundry.paradigm.xyz | bash
-          echo "$HOME/.foundry/bin" >> $GITHUB_PATH
-          source $HOME/.bashrc
-          foundryup
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
 
       - name: Run fuzzing & tests (1000 fuzz runs)
         run: forge test --fuzz-runs 1000
