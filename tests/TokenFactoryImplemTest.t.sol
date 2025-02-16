@@ -117,4 +117,9 @@ contract TokenFactoryImplemTest is Test {
         assertEq(tokensAfter.length, 1);
         assertEq(tokensAfter[0], 0);
     }
+
+    function testInitializeCanOnlyBeCalledOnce() public {
+        vm.expectRevert();
+        nft.initialize();
+    }
 }
