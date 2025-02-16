@@ -212,7 +212,13 @@ These commands allow you to track which tokens belong to a specific address and 
 | Check the owner of a specific NFT | `cast call $PROXY_ADDRESS "ownerOf(uint256)" <TokenID> --rpc-url $RPC_URL` |
 | Burn an NFT | `cast send $PROXY_ADDRESS "burn(uint256)" <TokenID> --rpc-url $RPC_URL --private-key $PRIVATE_KEY` |
 
-## Static Security analysis
+## Security aspect
+
+Although some testing has been conducted, it's important to note that this contract is relatively small and straightforward, leveraging OpenZeppelin's battle-tested libraries for ERC721 functionality and upgradeability. Given that most of the core logic (minting, burning, ownership tracking) is inherited from OpenZeppelin's well-audited contracts, the likelihood of vulnerabilities is minimal. 
+
+However, the tests includes static analysis, fuzzing, and unit tests. It has been performed to ensure robustness and correctness, even if it may seem overkill for such a simple implementation.
+
+### Static analysis
 
 No problematic pattern found.
 
@@ -225,3 +231,31 @@ Slither: `slither . --json slither_out.json --filter-paths "lib/*"`
         "error": null,
         "results": {}
     }
+
+### Fuzzing & Testing
+
+No problematic behavior found.
+
+Foundry: `forge test --fuzz-runs 500`
+
+    Ran 12 tests for tests/TokenFactoryImplemTest.t.sol:TokenFactoryImplemTest
+    [PASS] testBurnByNonOwner() (gas: 149784)
+    [PASS] testBurnByNonOwnerDoesNotAffectTrueOwner() (gas: 156876)
+    [PASS] testBurnNFT() (gas: 120035)
+    [PASS] testBurnNonExistentToken() (gas: 15647)
+    [PASS] testInitializeCanOnlyBeCalledOnce() (gas: 15624)
+    [PASS] testMintFailByNonOwner() (gas: 18672)
+    [PASS] testMintNFT() (gas: 149116)
+    [PASS] testOwner() (gas: 17741)
+    [PASS] testTokensOfOwnerAfterBurn() (gas: 118983)
+    [PASS] testTokensOfOwnerAfterMint() (gas: 143745)
+    [PASS] testUpgrade() (gas: 1603011)
+    [PASS] testUpgradeFail() (gas: 1593014)
+    Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 1.47ms (2.82ms CPU time)
+
+    Ran 1 test for tests/TokenFactoryImplemFuzz.t.sol:TokenFactoryImplemFuzz
+
+    [PASS] testMassMintBurn(uint256,uint256) (runs: 500, μ: 107635327, ~: 110086287)
+    Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 41.47s (41.47s CPU time)
+
+    Ran 2 test suites in 41.48s (41.47s CPU time): 13 tests passed, 0 failed, 0 skipped (13 total tests)
