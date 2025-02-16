@@ -100,4 +100,21 @@ contract TokenFactoryImplemTest is Test {
     function testOwner() public view {
         assertEq(nft.owner(), owner);
     }
+
+    function testBurnByNonOwnerDoesNotAffectTrueOwner() public {
+        nft.mintNFT(recipient, "ipfs://QmTestURI");
+
+        uint256[] memory tokensBefore = nft.tokensOfOwner(recipient);
+        assertEq(tokensBefore.length, 1);
+        assertEq(tokensBefore[0], 0);
+
+        // Another user tries to burn it (should fail)
+        vm.prank(anotherUser);
+        vm.expectRevert();
+        nft.burn(0);
+
+        uint256[] memory tokensAfter = nft.tokensOfOwner(recipient);
+        assertEq(tokensAfter.length, 1);
+        assertEq(tokensAfter[0], 0);
+    }
 }
