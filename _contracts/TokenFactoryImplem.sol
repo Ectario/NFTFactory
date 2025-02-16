@@ -42,13 +42,12 @@ contract TokenFactoryImplem is ERC721URIStorageUpgradeable, ERC721BurnableUpgrad
     function burn(uint256 tokenId) public override {
         address owner = ownerOf(tokenId);
 
-        // Remove the token ID from the owner's list
-        _removeTokenFromOwnerList(owner, tokenId);
-
         // Call ERC721BurnableUpgradeable's burn function
         super.burn(tokenId);
-
         emit NFTBurned(owner, tokenId);
+        
+        // Remove the token ID from the owner's list
+        _removeTokenFromOwnerList(owner, tokenId);
     }
 
     function tokensOfOwner(address owner) external view returns (uint256[] memory) {
